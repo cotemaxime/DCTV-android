@@ -9,13 +9,12 @@ import android.view.MenuItem;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import tv.diamondclub.dctv.R;
-import tv.diamondclub.dctv.services.NotificationManager;
+import tv.diamondclub.dctv.persistence.Persistence;
 import tv.diamondclub.dctv.services.PlayServiceService;
 
 
 public class HistoryMain extends Activity {
     private PlayServiceService playService;
-    private NotificationManager notificationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +22,13 @@ public class HistoryMain extends Activity {
         setContentView(R.layout.history_main);
 
         playService = new PlayServiceService(this);
-        notificationManager = new NotificationManager();
+        this.setupPlayService();
+        Persistence.setup(this.getBaseContext());
 
+    }
+
+    private void setupPlayService()
+    {
         if (playService.checkPlayServices()) {
             GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
             String regid = playService.getRegistrationId(getApplicationContext());
@@ -33,14 +37,14 @@ public class HistoryMain extends Activity {
                 playService.registerInBackground(gcm);
             }
         } else {
-            Log.i("DCTV", "No valid Google Play Services APK found.");
+            Log.e("DCTV", "No valid Google Play Services APK found.");
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        playService.checkPlayServices();
+        setupPlayService();
     }
 
     @Override
