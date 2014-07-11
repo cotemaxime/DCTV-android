@@ -13,6 +13,7 @@ import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.util.Date;
 
+import tv.diamondclub.dctv.core.Item;
 import tv.diamondclub.dctv.persistence.Persistence;
 import tv.diamondclub.dctv.ui.HistoryMain;
 
@@ -54,7 +55,7 @@ public class GCMNotificationManager extends IntentService {
 
     private void saveNotification(String msg)
     {
-        Persistence.getInstance().saveNotification(msg, new Date());
+        Persistence.getInstance().saveNotification(new Item(msg, new Date()));
     }
 
     private void sendNotification(String msg)
