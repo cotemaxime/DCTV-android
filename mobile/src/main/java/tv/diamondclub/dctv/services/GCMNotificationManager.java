@@ -45,17 +45,17 @@ public class GCMNotificationManager extends IntentService {
             {
                 Log.i("DCTV", "Received: " + extras);
                 this.sendNotification(extras.getString("message"));
-                //this.saveNotification(extras.getString("message"));
+                this.saveNotification(extras.getString("message"));
             }
         }
 
         GCMBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    //private void saveNotification(String msg)
-    //{
-    //    Persistence.getInstance().saveNotification(msg, new Date());
-    //}
+    private void saveNotification(String msg)
+    {
+        Persistence.getInstance().saveNotification(msg, new Date());
+    }
 
     private void sendNotification(String msg)
     {
