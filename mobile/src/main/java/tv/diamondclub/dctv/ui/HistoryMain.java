@@ -25,6 +25,8 @@ public class HistoryMain extends Activity {
         this.setupPlayService();
         Persistence.setup(this.getBaseContext());
 
+        //Temporary just to create the db and prep things at fist
+        Persistence.getInstance();
     }
 
     private void setupPlayService()

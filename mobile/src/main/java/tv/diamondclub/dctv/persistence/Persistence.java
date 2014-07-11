@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.util.Date;
+import java.util.List;
+
+import tv.diamondclub.dctv.core.Item;
 
 public class Persistence
 {
@@ -29,12 +31,19 @@ public class Persistence
         return instance;
     }
 
-    public void saveNotification(String text, Date date)
+    public void saveNotification(Item notification)
     {
         ContentValues data = new ContentValues();
         data.put("id", getNextId());
-        data.put("content", text);
-        data.put("dateTime", date.toString());
+        data.put("content", notification.getText());
+        data.put("dateTime", notification.getDate());
+
+        database.insert("notification", null, data);
+    }
+
+    public List<Item> loadNotifications()
+    {
+        return null;
     }
 
     public int getNextId()
