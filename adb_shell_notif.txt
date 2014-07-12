@@ -1,0 +1,5 @@
+# Notification
+am broadcast -a com.google.android.c2dm.intent.RECEIVE -n tv.diamondclub.dctv/tv.diamondclub.dctv.services.GCMBroadcastReceiver --es "message" "DTNS Time!!" --es "notification" true
+
+# Message
+am broadcast -a com.google.android.c2dm.intent.RECEIVE -n tv.diamondclub.dctv/tv.diamondclub.dctv.services.GCMBroadcastReceiver --es "message" "Night Attack delay" --es "notification" false --es "content" "Night attack delayed tonight"

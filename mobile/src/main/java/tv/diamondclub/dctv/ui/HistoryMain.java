@@ -1,20 +1,28 @@
 package tv.diamondclub.dctv.ui;
 
 import android.app.Activity;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import java.util.List;
+
 import tv.diamondclub.dctv.R;
+import tv.diamondclub.dctv.core.Item;
 import tv.diamondclub.dctv.persistence.Persistence;
+import tv.diamondclub.dctv.services.GCMNotificationManager;
 import tv.diamondclub.dctv.services.PlayServiceService;
 
 
 public class HistoryMain extends Activity {
     private PlayServiceService playService;
+    private ListView history;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,8 +33,18 @@ public class HistoryMain extends Activity {
         this.setupPlayService();
         Persistence.setup(this.getBaseContext());
 
-        //Temporary just to create the db and prep things at fist
-        Persistence.getInstance();
+        GCMNotificationManager.cancelAllNotification(this.getApplicationContext());
+
+        history = (ListView) findViewById(R.id.historyList);
+        this.refreshList();
+    }
+
+    public void refreshList()
+    {
+        ItemAdapter adapter = new ItemAdapter(this.getApplicationContext(),
+                R.layout.item_list,
+                Persistence.getInstance().loadNotifications());
+        history.setAdapter(adapter);
     }
 
     private void setupPlayService()
@@ -47,6 +65,8 @@ public class HistoryMain extends Activity {
     protected void onResume() {
         super.onResume();
         setupPlayService();
+        GCMNotificationManager.cancelAllNotification(this.getApplicationContext());
+        refreshList();
     }
 
     @Override

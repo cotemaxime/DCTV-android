@@ -11,6 +11,8 @@ import android.util.Log;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import tv.diamondclub.dctv.core.Item;
@@ -22,6 +24,7 @@ import tv.diamondclub.dctv.ui.HistoryMain;
  */
 public class GCMNotificationManager extends IntentService {
     public static final int NOTIFICATION_ID = 1;
+    public static final int MESSAGE_ID = 2;
 
     public GCMNotificationManager() { super("NotificationGCM"); }
 
@@ -35,27 +38,35 @@ public class GCMNotificationManager extends IntentService {
         if (!extras.isEmpty())
         {
             if (GoogleCloudMessaging.MESSAGE_TYPE_SEND_ERROR.equals(messageType))
-            {
-                sendNotification("Send error: " + extras.toString());
-            }
+                Log.e("DCTV", "Send error: " + extras.toString());
             else if (GoogleCloudMessaging.MESSAGE_TYPE_DELETED.equals(messageType))
-            {
-                sendNotification("Deleted messages on server: " + extras.toString());
-            }
+                Log.e("DCTV", "Deleted messages on server: " + extras.toString());
             else if (GoogleCloudMessaging.MESSAGE_TYPE_MESSAGE.equals(messageType))
             {
-                Log.i("DCTV", "Received: " + extras);
-                this.sendNotification(extras.getString("message"));
-                this.saveNotification(extras.getString("message"));
+                String message = extras.getString("message");
+
+                if (extras.getString("notification").equals("true"))
+                {
+                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy - kk:mm");
+                    Persistence.getInstance().saveNotification(new Item(message, sdf.format(new Date())), false);
+                    this.sendNotification(message);
+                }
+                else
+                {
+                    Persistence.getInstance().saveNotification(new Item(message, extras.getString("content")), true);
+                    this.sendMessage(message, extras.getString("content"));
+                }
             }
         }
 
         GCMBroadcastReceiver.completeWakefulIntent(intent);
     }
 
-    private void saveNotification(String msg)
+    public static void cancelAllNotification(Context context)
     {
-        Persistence.getInstance().saveNotification(new Item(msg, new Date()));
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(NOTIFICATION_ID);
+        notificationManager.cancel(MESSAGE_ID);
     }
 
     private void sendNotification(String msg)
@@ -65,14 +76,30 @@ public class GCMNotificationManager extends IntentService {
 
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, HistoryMain.class), 0);
 
-        NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(android.R.drawable.alert_dark_frame)
-                        .setContentTitle("Diamond Club Notification")
-                        .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
-                        .setContentText(msg);
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(android.R.drawable.alert_dark_frame)
+                .setContentTitle("Diamond Club Notification")
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(msg))
+                .setContentText(msg)
+                .setContentIntent(contentIntent);
 
-        mBuilder.setContentIntent(contentIntent);
         mNotificationManager.notify(NOTIFICATION_ID, mBuilder.build());
+    }
+
+    private void sendMessage(String title, String content)
+    {
+        Log.i("DCTV", "You shall notify!");
+        NotificationManager mNotificationManager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, HistoryMain.class), 0);
+
+        NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(android.R.drawable.alert_light_frame)
+                .setContentTitle(title)
+                .setStyle(new NotificationCompat.BigTextStyle().bigText(content))
+                .setContentText(content)
+                .setContentIntent(contentIntent);
+
+        mNotificationManager.notify(MESSAGE_ID, mBuilder.build());
     }
 }

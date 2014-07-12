@@ -1,0 +1,1 @@
+var topicTpl = ' | http://diamondclub.tv | Tom\'s Calendar: http://tiny.cc/tomlive | Support DTNS: http://www.patreon.com/acedtect | Vent your drama at #drama'; 

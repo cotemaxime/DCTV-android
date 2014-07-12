@@ -5,7 +5,12 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import tv.diamondclub.dctv.core.Item;
 
@@ -31,19 +36,38 @@ public class Persistence
         return instance;
     }
 
-    public void saveNotification(Item notification)
+    public void saveNotification(Item notification, boolean message)
     {
         ContentValues data = new ContentValues();
         data.put("id", getNextId());
-        data.put("content", notification.getText());
-        data.put("dateTime", notification.getDate());
+        data.put("title", notification.getText());
+        data.put("content", notification.getContent());
+        data.put("message", message);
 
         database.insert("notification", null, data);
     }
 
     public List<Item> loadNotifications()
     {
-        return null;
+        List<Item> ret = new ArrayList<Item>();
+
+        Cursor cur = database.query("notification", null, null, null, null, null, null);
+        cur.moveToFirst();
+
+        while(!cur.isAfterLast())
+        {
+            Item i = this.extractItem(cur);
+            if (i != null)
+                ret.add(i);
+            cur.moveToNext();
+        }
+
+        return ret;
+    }
+
+    private Item extractItem(Cursor cur)
+    {
+        return new Item(cur.getString(1), cur.getString(2));
     }
 
     public int getNextId()

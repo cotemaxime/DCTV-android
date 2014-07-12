@@ -33,8 +33,9 @@ public class DCTVDatabaseHelper extends SQLiteOpenHelper
         Log.i("DCTV", "create database");
         String create = "CREATE TABLE " + option + " notification(" +
                 "id int primary key, " +
-                "content text, " +
-                "dateTime text);";
+                "title text, " +
+                "content text," +
+                "message boolean);";
         database.execSQL(create);
 
         create = "CREATE TABLE " + option + " notification_id(" +
