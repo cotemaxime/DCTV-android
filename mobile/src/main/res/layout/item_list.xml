@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/itemDate"
                 android:textSize="20dp"
-                android:maxLines="1"
+                android:maxLines="5"
                 android:ellipsize="end"
             android:textColor="@android:color/black" />
     </LinearLayout>

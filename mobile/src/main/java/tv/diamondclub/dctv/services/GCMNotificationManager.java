@@ -34,6 +34,7 @@ public class GCMNotificationManager extends IntentService {
         Bundle extras = intent.getExtras();
         GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
         String messageType = gcm.getMessageType(intent);
+        Persistence persistence = Persistence.getInstance();
 
         if (!extras.isEmpty())
         {
@@ -48,12 +49,12 @@ public class GCMNotificationManager extends IntentService {
                 if (extras.getString("notification").equals("true"))
                 {
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy - kk:mm");
-                    Persistence.getInstance().saveNotification(new Item(message, sdf.format(new Date())), false);
+                    persistence.saveNotification(new Item(persistence.getNextId(), message, sdf.format(new Date())), false);
                     this.sendNotification(message);
                 }
                 else
                 {
-                    Persistence.getInstance().saveNotification(new Item(message, extras.getString("content")), true);
+                    persistence.saveNotification(new Item(persistence.getNextId(), message, extras.getString("content")), true);
                     this.sendMessage(message, extras.getString("content"));
                 }
             }

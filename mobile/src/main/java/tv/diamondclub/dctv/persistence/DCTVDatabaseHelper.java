@@ -32,7 +32,7 @@ public class DCTVDatabaseHelper extends SQLiteOpenHelper
     {
         Log.i("DCTV", "create database");
         String create = "CREATE TABLE " + option + " notification(" +
-                "id int primary key, " +
+                "id text primary key, " +
                 "title text, " +
                 "content text," +
                 "message boolean);";
@@ -79,7 +79,7 @@ public class DCTVDatabaseHelper extends SQLiteOpenHelper
         }
         catch (Exception e)
         {
-            Log.v(tableName, e.getMessage(), e);
+            Log.e(tableName, e.getMessage(), e);
         }
         finally
         {

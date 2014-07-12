@@ -39,7 +39,7 @@ public class Persistence
     public void saveNotification(Item notification, boolean message)
     {
         ContentValues data = new ContentValues();
-        data.put("id", getNextId());
+        data.put("id", notification.getId());
         data.put("title", notification.getText());
         data.put("content", notification.getContent());
         data.put("message", message);
@@ -67,10 +67,10 @@ public class Persistence
 
     private Item extractItem(Cursor cur)
     {
-        return new Item(cur.getString(1), cur.getString(2));
+        return new Item(cur.getString(0), cur.getString(1), cur.getString(2));
     }
 
-    public int getNextId()
+    public String getNextId()
     {
         Cursor cur = database.query("notification_id", null, null, null, null, null, null);
         cur.moveToFirst();
@@ -83,7 +83,12 @@ public class Persistence
         database.delete("notification_id", null, null);
         database.insert("notification_id", null, data);
 
-        return id;
+        return "" + id;
+    }
+
+    public void removeItem(Item item)
+    {
+        database.delete("notification", "id = \"" + item.getId() + "\"", null);
     }
 }
 

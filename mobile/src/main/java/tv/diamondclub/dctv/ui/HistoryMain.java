@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import tv.diamondclub.dctv.R;
 import tv.diamondclub.dctv.core.Item;
+import tv.diamondclub.dctv.extern.SwipeDismissListViewTouchListener;
 import tv.diamondclub.dctv.persistence.Persistence;
 import tv.diamondclub.dctv.services.GCMNotificationManager;
 import tv.diamondclub.dctv.services.PlayServiceService;
@@ -23,6 +25,7 @@ import tv.diamondclub.dctv.services.PlayServiceService;
 public class HistoryMain extends Activity {
     private PlayServiceService playService;
     private ListView history;
+    private ItemAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,12 +39,36 @@ public class HistoryMain extends Activity {
         GCMNotificationManager.cancelAllNotification(this.getApplicationContext());
 
         history = (ListView) findViewById(R.id.historyList);
+        this.setupList();
         this.refreshList();
+    }
+
+    private void setupList()
+    {
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        history,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    adapter.remove(adapter.getItem(position));
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+        history.setOnTouchListener(touchListener);
+        history.setOnScrollListener(touchListener.makeScrollListener());
     }
 
     public void refreshList()
     {
-        ItemAdapter adapter = new ItemAdapter(this.getApplicationContext(),
+        adapter = new ItemAdapter(this.getApplicationContext(),
                 R.layout.item_list,
                 Persistence.getInstance().loadNotifications());
         history.setAdapter(adapter);

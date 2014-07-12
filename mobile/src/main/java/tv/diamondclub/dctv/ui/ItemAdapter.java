@@ -12,6 +12,7 @@ import java.util.List;
 
 import tv.diamondclub.dctv.R;
 import tv.diamondclub.dctv.core.Item;
+import tv.diamondclub.dctv.persistence.Persistence;
 
 public class ItemAdapter extends ArrayAdapter<Item>
 {
@@ -45,5 +46,12 @@ public class ItemAdapter extends ArrayAdapter<Item>
         tContent.setText(i.getContent());
 
         return conView;
+    }
+
+    @Override
+    public void remove(Item item)
+    {
+        super.remove(item);
+        Persistence.getInstance().removeItem(item);
     }
 }
