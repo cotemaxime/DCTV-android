@@ -5,12 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import tv.diamondclub.dctv.core.Item;
 
@@ -63,6 +59,36 @@ public class Persistence
         }
 
         return ret;
+    }
+
+    public boolean loadSettingNotification()
+    {
+        Cursor cur = database.query("settings", null, null, null, null, null, null);
+        cur.moveToFirst();
+        return cur.getInt(1) == 1;
+    }
+
+    public boolean loadSettingMessage()
+    {
+        Cursor cur = database.query("settings", null, null, null, null, null, null);
+        cur.moveToFirst();
+        return cur.getInt(0) == 1;
+    }
+
+    public void saveSettingNotification(boolean notification)
+    {
+        ContentValues data = new ContentValues();
+        data.put("notification", notification ? 1 : 0);
+
+        database.update("settings", data, null, null);
+    }
+
+    public void saveSettingMessage(boolean message)
+    {
+        ContentValues data = new ContentValues();
+        data.put("message", message ? 1 : 0);
+
+        database.update("settings", data, null, null);
     }
 
     private Item extractItem(Cursor cur)

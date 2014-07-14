@@ -38,12 +38,19 @@ public class DCTVDatabaseHelper extends SQLiteOpenHelper
                 "message boolean);";
         database.execSQL(create);
 
+        create = "CREATE TABLE " + option + " settings(" +
+                "message int," +
+                "notification int);";
+        database.execSQL(create);
+
         create = "CREATE TABLE " + option + " notification_id(" +
                 "currentId int);";
         database.execSQL(create);
 
-        if(option.equals(""))
+        if(option.equals("")) {
             database.execSQL("INSERT INTO notification_id VALUES(0);");
+            database.execSQL("INSERT INTO settings VALUES(1,1);");
+        }
     }
 
     @Override

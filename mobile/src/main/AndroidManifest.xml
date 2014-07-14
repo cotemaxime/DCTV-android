@@ -37,6 +37,7 @@
             </intent-filter>
         </receiver>
         <service android:name=".services.GCMNotificationManager" />
+        <activity android:name=".ui.Settings" />
     </application>
 
 </manifest>
