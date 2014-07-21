@@ -35,7 +35,8 @@ public class DCTVDatabaseHelper extends SQLiteOpenHelper
                 "id text primary key, " +
                 "title text, " +
                 "content text," +
-                "message boolean);";
+                "message boolean," +
+                "link text);";
         database.execSQL(create);
 
         create = "CREATE TABLE " + option + " settings(" +

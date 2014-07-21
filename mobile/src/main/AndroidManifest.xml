@@ -29,8 +29,8 @@
             </intent-filter>
         </activity>
         <receiver
-            android:name=".services.GCMBroadcastReceiver" >
-            <!--android:permission="com.google.android.c2dm.permission.SEND" > -->
+            android:name=".services.GCMBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <category android:name=".services.NotificationManager" />

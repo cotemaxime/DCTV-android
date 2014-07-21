@@ -7,12 +7,14 @@ public class Item {
     private String id;
     private String text;
     private String content;
+    private String link;
 
-    public Item(String id, String text, String content)
+    public Item(String id, String text, String content, String link)
     {
         this.id = id;
         this.text = text;
         this.content = content;
+        this.link = link;
     }
 
     public String getText() { return this.text; }
@@ -20,4 +22,6 @@ public class Item {
     public String getContent() { return this.content; }
 
     public String getId() { return this.id; }
+
+    public String getLink() {return this.link; }
 }

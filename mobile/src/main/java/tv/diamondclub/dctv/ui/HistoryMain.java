@@ -35,9 +35,9 @@ public class HistoryMain extends Activity {
 
         playService = new PlayServiceService(this);
         this.setupPlayService();
-        Persistence.setup(this.getBaseContext());
+        Persistence.setup(this);
 
-        GCMNotificationManager.cancelAllNotification(this.getApplicationContext());
+        GCMNotificationManager.cancelAllNotification(this);
 
         history = (ListView) findViewById(R.id.historyList);
         this.setupList();
@@ -69,7 +69,7 @@ public class HistoryMain extends Activity {
 
     public void refreshList()
     {
-        adapter = new ItemAdapter(this.getApplicationContext(),
+        adapter = new ItemAdapter(this,
                 R.layout.item_list,
                 Persistence.getInstance().loadNotifications());
         history.setAdapter(adapter);
@@ -93,7 +93,7 @@ public class HistoryMain extends Activity {
     protected void onResume() {
         super.onResume();
         setupPlayService();
-        GCMNotificationManager.cancelAllNotification(this.getApplicationContext());
+        GCMNotificationManager.cancelAllNotification(this);
         refreshList();
     }
 

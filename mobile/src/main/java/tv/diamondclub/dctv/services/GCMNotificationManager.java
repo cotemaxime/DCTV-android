@@ -48,14 +48,15 @@ public class GCMNotificationManager extends IntentService {
 
                 if (extras.getString("notification").equals("true"))
                 {
+                    String link = extras.getString("link");
                     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyy - kk:mm");
-                    persistence.saveNotification(new Item(persistence.getNextId(), message, sdf.format(new Date())), false);
+                    persistence.saveNotification(new Item(persistence.getNextId(), message, sdf.format(new Date()), link), false);
                     if (persistence.loadSettingNotification())
                         this.sendNotification(message);
                 }
                 else
                 {
-                    persistence.saveNotification(new Item(persistence.getNextId(), message, extras.getString("content")), true);
+                    persistence.saveNotification(new Item(persistence.getNextId(), message, extras.getString("content"), ""), true);
                     if (persistence.loadSettingMessage())
                         this.sendMessage(message, extras.getString("content"));
                 }

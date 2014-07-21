@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.util.Log;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -13,6 +14,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
 import java.io.IOException;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import tv.diamondclub.dctv.ui.HistoryMain;
 
@@ -21,10 +23,9 @@ import tv.diamondclub.dctv.ui.HistoryMain;
  */
 public class PlayServiceService {
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
-    public static final String EXTRA_MESSAGE = "message";
     public static final String PROPERTY_REG_ID = "registration_id";
     private static final String PROPERTY_APP_VERSION = "1.0";
-    String SENDER_ID = "Your-Sender-ID";
+    private String SENDER_ID = "177457496813";
     private Activity parent;
 
     public PlayServiceService(Activity parent) {
@@ -87,7 +88,7 @@ public class PlayServiceService {
                     String regid = gcm.register(SENDER_ID);
                     msg = "Device registered, registration ID=" + regid;
 
-                    sendRegistrationIdToBackend();
+                    sendRegistrationIdToBackend(gcm);
                     storeRegistrationId(parent.getApplicationContext(), regid);
                 } catch (IOException ex) {
                     msg = "Error :" + ex.getMessage();
@@ -102,8 +103,16 @@ public class PlayServiceService {
         }.execute(null, null, null);
     }
 
-    private void sendRegistrationIdToBackend() {
-        Log.e("DCTV", "TODO");
+    private void sendRegistrationIdToBackend(GoogleCloudMessaging gcm) {
+        AtomicInteger msgId = new AtomicInteger();
+        try {
+            Bundle data = new Bundle();
+            data.putString("ACTION", "register");
+            String id = Integer.toString(msgId.incrementAndGet());
+            gcm.send(SENDER_ID + "@gcm.googleapis.com", id, data);
+        } catch (IOException ex) {
+            Log.e("DCTV", "Error :" + ex.getMessage());
+        }
     }
 
     private void storeRegistrationId(Context context, String regId) {

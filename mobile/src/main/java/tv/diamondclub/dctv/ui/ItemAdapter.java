@@ -42,7 +42,9 @@ public class ItemAdapter extends ArrayAdapter<Item>
 
         TextView tTitle = (TextView) conView.findViewById(R.id.itemTitle);
         tTitle.setText(i.getText());
-        TextView tContent = (TextView) conView.findViewById(R.id.itemDate);
+        TextView tLink = (TextView) conView.findViewById(R.id.itemLink);
+        tLink.setText(i.getLink());
+        TextView tContent = (TextView) conView.findViewById(R.id.itemContent);
         tContent.setText(i.getContent());
 
         return conView;

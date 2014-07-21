@@ -39,6 +39,7 @@ public class Persistence
         data.put("title", notification.getText());
         data.put("content", notification.getContent());
         data.put("message", message);
+        data.put("link", notification.getLink());
 
         database.insert("notification", null, data);
     }
@@ -93,7 +94,7 @@ public class Persistence
 
     private Item extractItem(Cursor cur)
     {
-        return new Item(cur.getString(0), cur.getString(1), cur.getString(2));
+        return new Item(cur.getString(0), cur.getString(1), cur.getString(2), cur.getString(4));
     }
 
     public String getNextId()
