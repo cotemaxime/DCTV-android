@@ -1,4 +1,4 @@
-package tv.diamondclub.dctv;
+package cote.maxime.app.dctv;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

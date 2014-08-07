@@ -6,7 +6,7 @@ android {
     buildToolsVersion "20.0.0"
 
     defaultConfig {
-        applicationId "tv.diamondclub.dctv"
+        applicationId "cote.maxime.app.dctv"
         minSdkVersion 20
         targetSdkVersion 'L'
         versionCode 1

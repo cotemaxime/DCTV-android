@@ -1,4 +1,4 @@
-package tv.diamondclub.dctv.services;
+package cote.maxime.app.dctv.services;
 
 import android.app.Activity;
 import android.content.ComponentName;
@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.WakefulBroadcastReceiver;
 
-import tv.diamondclub.dctv.persistence.Persistence;
+import cote.maxime.app.dctv.persistence.Persistence;
 
 /**
  * Created by maxime on 7/10/14.

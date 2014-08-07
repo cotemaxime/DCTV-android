@@ -2,7 +2,9 @@
 <resources>
 
     <string name="app_name">DCTV</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+    <string name="crash_toast_text">Oh noes a crash just happened, collecting informations</string>
+    <string name="crash_dialog_text">An unexpected error occurred forcing the application to stop. Please help us fix this by sending us error data, all you have to do is click OK.</string>
+    <string name="crash_dialog_ok_toast">Information sent, thanks</string>
+    <string name="crash_dialog_comment_prompt">What were you doing when the crash happened? (Optional) </string>
 </resources>

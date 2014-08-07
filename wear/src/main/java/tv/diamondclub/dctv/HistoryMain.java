@@ -1,4 +1,4 @@
-package tv.diamondclub.dctv;
+package cote.maxime.app.dctv;
 
 import android.os.Bundle;
 import android.support.wearable.activity.WatchActivity;

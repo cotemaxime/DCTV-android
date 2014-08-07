@@ -1,4 +1,4 @@
-package tv.diamondclub.dctv.persistence;
+package cote.maxime.app.dctv.persistence;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,18 +8,22 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import tv.diamondclub.dctv.core.Item;
+import cote.maxime.app.dctv.core.Item;
 
 public class Persistence
 {
     private static Persistence instance = null;
     private SQLiteDatabase database;
     private static Context context;
+    private int notificationNumber;
+    private List<String> previousNotifications;
 
     private Persistence()
     {
         DCTVDatabaseHelper dbHelper = new DCTVDatabaseHelper(context);
         database = dbHelper.getWritableDatabase();
+        previousNotifications = new ArrayList<String>();
+        notificationNumber = 0;
     }
 
     public static void setup(Context con) { context = con; }
@@ -48,7 +52,7 @@ public class Persistence
     {
         List<Item> ret = new ArrayList<Item>();
 
-        Cursor cur = database.query("notification", null, null, null, null, null, null);
+        Cursor cur = database.query("notification", null, null, null, null, null, "content DESC", null);
         cur.moveToFirst();
 
         while(!cur.isAfterLast())
@@ -116,6 +120,32 @@ public class Persistence
     public void removeItem(Item item)
     {
         database.delete("notification", "id = \"" + item.getId() + "\"", null);
+    }
+
+    public void addNotificationNumber()
+    {
+        this.notificationNumber++;
+    }
+
+    public int getNotificationNumber()
+    {
+        return this.notificationNumber;
+    }
+
+    public List<String> getPreviousNotifications()
+    {
+        return previousNotifications;
+    }
+
+    public void addPreviousNotifications(String notification)
+    {
+        previousNotifications.add(notification);
+    }
+
+    public void clearNotifications()
+    {
+        previousNotifications.clear();
+        notificationNumber = 0;
     }
 }
 

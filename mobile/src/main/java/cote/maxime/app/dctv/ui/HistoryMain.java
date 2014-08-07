@@ -1,30 +1,22 @@
-package tv.diamondclub.dctv.ui;
+package cote.maxime.app.dctv.ui;
 
 import android.app.Activity;
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 
-import java.util.List;
-
-import tv.diamondclub.dctv.R;
-import tv.diamondclub.dctv.core.Item;
-import tv.diamondclub.dctv.extern.SwipeDismissListViewTouchListener;
-import tv.diamondclub.dctv.persistence.Persistence;
-import tv.diamondclub.dctv.services.GCMNotificationManager;
-import tv.diamondclub.dctv.services.PlayServiceService;
-
+import cote.maxime.app.dctv.R;
+import cote.maxime.app.dctv.extern.SwipeDismissListViewTouchListener;
+import cote.maxime.app.dctv.persistence.Persistence;
+import cote.maxime.app.dctv.services.GCMNotificationManager;
+import cote.maxime.app.dctv.services.PlayServiceService;
 
 public class HistoryMain extends Activity {
-    private PlayServiceService playService;
     private ListView history;
     private ItemAdapter adapter;
 
@@ -33,11 +25,9 @@ public class HistoryMain extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.history_main);
 
-        playService = new PlayServiceService(this);
+        PlayServiceService.setup(this);
         this.setupPlayService();
         Persistence.setup(this);
-
-        GCMNotificationManager.cancelAllNotification(this);
 
         history = (ListView) findViewById(R.id.historyList);
         this.setupList();
@@ -77,23 +67,23 @@ public class HistoryMain extends Activity {
 
     private void setupPlayService()
     {
-        if (playService.checkPlayServices()) {
+        PlayServiceService playService = PlayServiceService.getInstance();
+        if (playService.checkPlayServices())
+        {
             GoogleCloudMessaging gcm = GoogleCloudMessaging.getInstance(this);
             String regid = playService.getRegistrationId(getApplicationContext());
 
-            if (regid.isEmpty()) {
+            if (regid.isEmpty())
                 playService.registerInBackground(gcm);
-            }
-        } else {
-            Log.e("DCTV", "No valid Google Play Services APK found.");
         }
+        else
+            Log.e("DCTV", "No valid Google Play Services APK found.");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         setupPlayService();
-        GCMNotificationManager.cancelAllNotification(this);
         refreshList();
     }
 
@@ -110,6 +100,12 @@ public class HistoryMain extends Activity {
         {
             Intent intent = new Intent(this, Settings.class);
             startActivity(intent);
+            return true;
+        }
+        else if (id == R.id.action_clearall)
+        {
+            adapter.removeAll();
+            adapter.notifyDataSetChanged();
             return true;
         }
         return super.onOptionsItemSelected(item);

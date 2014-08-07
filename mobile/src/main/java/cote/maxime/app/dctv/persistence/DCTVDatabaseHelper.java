@@ -1,4 +1,4 @@
-package tv.diamondclub.dctv.persistence;
+package cote.maxime.app.dctv.persistence;
 
 import android.content.Context;
 import android.database.Cursor;

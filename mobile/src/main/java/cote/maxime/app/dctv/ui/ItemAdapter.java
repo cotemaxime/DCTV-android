@@ -1,4 +1,4 @@
-package tv.diamondclub.dctv.ui;
+package cote.maxime.app.dctv.ui;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,9 +10,9 @@ import android.widget.TextView;
 
 import java.util.List;
 
-import tv.diamondclub.dctv.R;
-import tv.diamondclub.dctv.core.Item;
-import tv.diamondclub.dctv.persistence.Persistence;
+import cote.maxime.app.dctv.R;
+import cote.maxime.app.dctv.core.Item;
+import cote.maxime.app.dctv.persistence.Persistence;
 
 public class ItemAdapter extends ArrayAdapter<Item>
 {
@@ -43,7 +43,12 @@ public class ItemAdapter extends ArrayAdapter<Item>
         TextView tTitle = (TextView) conView.findViewById(R.id.itemTitle);
         tTitle.setText(i.getText());
         TextView tLink = (TextView) conView.findViewById(R.id.itemLink);
-        tLink.setText(i.getLink());
+
+        if(i.getLink().equals(""))
+            tLink.setVisibility(View.GONE);
+        else
+            tLink.setText(i.getLink());
+
         TextView tContent = (TextView) conView.findViewById(R.id.itemContent);
         tContent.setText(i.getContent());
 
@@ -55,5 +60,11 @@ public class ItemAdapter extends ArrayAdapter<Item>
     {
         super.remove(item);
         Persistence.getInstance().removeItem(item);
+    }
+
+    public void removeAll()
+    {
+        for(int i = getCount() - 1; i >= 0; i--)
+            remove(getItem(i));
     }
 }

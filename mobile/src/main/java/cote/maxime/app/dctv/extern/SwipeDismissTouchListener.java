@@ -1,4 +1,4 @@
-package tv.diamondclub.dctv.extern;
+package cote.maxime.app.dctv.extern;
 
 /*
  * Copyright 2013 Google Inc.

@@ -1,4 +1,4 @@
-package tv.diamondclub.dctv.core;
+package cote.maxime.app.dctv.core;
 
 /**
  * Created by maxime on 7/10/14.
